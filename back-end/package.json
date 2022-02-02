@@ -1,0 +1,13 @@
+{
+  "name": "cheat-chess",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js 3333"
+  },
+  "dependencies": {
+    "express": "~4.16.1",
+    "kokopu": "^2.2.1",
+    "ws": "^8.4.0"
+  }
+}

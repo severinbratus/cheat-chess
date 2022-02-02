@@ -1,0 +1,49 @@
+<svg x="0" y="0" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <g id="dark-tile" transform="scale(0.25)">
+      <svg x="0" y="0" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="diagonalHatch" patternUnits="userSpaceOnUse" width="4" height="4">
+            <path d="M-1,1 l2,-2
+                     M0,4 l4,-4
+                     M3,5 l2,-2"
+                  style="stroke: black; stroke-width: 1" />
+          </pattern>
+        </defs>
+        <rect shape-rendering="cripsEdges" x="0" y="0" width="100%" height="100%" stroke="black" stroke-width="0" fill="url(#diagonalHatch)"></rect>
+      </svg>
+    </g>
+  </defs>
+  <use x="0.0" y="12.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="0.0" y="37.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="0.0" y="62.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="0.0" y="87.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="12.5" y="0.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="12.5" y="25.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="12.5" y="50.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="12.5" y="75.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="25.0" y="12.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="25.0" y="37.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="25.0" y="62.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="25.0" y="87.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="37.5" y="0.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="37.5" y="25.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="37.5" y="50.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="37.5" y="75.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="50.0" y="12.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="50.0" y="37.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="50.0" y="62.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="50.0" y="87.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="62.5" y="0.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="62.5" y="25.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="62.5" y="50.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="62.5" y="75.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="75.0" y="12.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="75.0" y="37.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="75.0" y="62.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="75.0" y="87.5" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="87.5" y="0.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="87.5" y="25.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="87.5" y="50.0" width="12.5" height="12.5" href="#dark-tile" />
+  <use x="87.5" y="75.0" width="12.5" height="12.5" href="#dark-tile" />
+</svg>

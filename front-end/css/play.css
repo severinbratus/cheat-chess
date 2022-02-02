@@ -1,0 +1,24 @@
+#board > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#base {
+    width: 100px;
+}
+
+.piece, .highlight {
+    width: 12.5px;
+}
+
+.highlight {
+    z-index: -10;
+}
+
+#prompt {
+    position: fixed;
+    bottom: 0;
+    font-size: 5px;
+    font-family: monospace;
+}
