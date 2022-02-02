@@ -6,7 +6,7 @@ The concept is to provide a visual feel for *the areas of influence* of the two 
 
 One image says it all, I hope:
 
-![Epic chess highlighting](/cheat-chess/demo.png?raw=true)
+![Epic chess highlighting](/demo.png?raw=true)
 
 ### Setup
 
