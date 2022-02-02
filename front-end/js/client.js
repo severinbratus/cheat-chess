@@ -183,4 +183,14 @@ const isValidOrigin = (square) => {
 }
 
 
+const setPrompt = (...statusMessageList) => {
+  prompt.innerHTML = statusMessageList.join(' ')
+}
+
+
+const promptTurn = () => {
+  setPrompt(position.turn() == color ? statusMessages.YOUR_TURN : statusMessages.OPP_TURN)
+}
+
+
 setup()
