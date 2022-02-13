@@ -1,24 +1,39 @@
 #board > * {
-    position: absolute;
-    top: 0;
-    left: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 #base {
-    width: 100px;
+	width: 100px;
 }
 
 .piece, .highlight {
-    width: 12.5px;
+	width: 12.5px;
 }
 
 .highlight {
-    z-index: -10;
+	z-index: -10;
+}
+
+.green {
+	/* color: palegreen; */
+	filter: invert(81%) sepia(28%) saturate(530%) hue-rotate(69deg) brightness(100%) contrast(108%);
+}
+
+.red {
+	/* color: lightsalmon; */
+	filter: invert(75%) sepia(42%) saturate(807%) hue-rotate(313deg) brightness(101%) contrast(102%);
+}
+
+.seagreen {
+	/* color: seagreen; */
+	filter: invert(40%) sepia(72%) saturate(364%) hue-rotate(94deg) brightness(97%) contrast(93%);
 }
 
 #prompt {
-    position: fixed;
-    bottom: 0;
-    font-size: 5px;
-    font-family: monospace;
+	position: fixed;
+	bottom: 0;
+	font-size: 5px;
+	font-family: monospace;
 }

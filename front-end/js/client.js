@@ -12,185 +12,189 @@ let over = false
 // origin square for a move
 let origin = null
 
-
 const setup = () => {
-  setPrompt(statusMessages.OPP_TURN)
-  socket = new WebSocket(`ws://${location.host}`)
-  socket.onmessage = onmessage
-  board.addEventListener('click', onclick)
+	setPrompt(statusMessages.OPP_TURN)
+	socket = new WebSocket(`ws://${location.host}`)
+	socket.onmessage = onmessage
+	board.addEventListener('click', onclick)
 }
-
 
 const onmessage = (event) => {
-  const message = JSON.parse(event.data)
+	const message = JSON.parse(event.data)
 
-  switch (message.type) {
-    case messages.START:
-      position = new kokopu.Position('chess960', message.scharnaglCode)
-      color = message.color
-      renderUI()
-      break
-    
-    case messages.MOVE:
-      const move = position.uci(message.moveUCI)
-      position.play(move)
-      renderUI()
-      break
-      
-    case messages.DISCONNECT:
-      if (!over) {
-        over = true
-        setPrompt(statusMessages.ABORTED, statusMessages.PLAY_AGAIN)
-      }
-      break
-  }
+	switch (message.type) {
+		case messages.START:
+			position = new kokopu.Position('chess960', message.scharnaglCode)
+			color = message.color
+			renderUI()
+			break
+
+		case messages.MOVE:
+			const move = position.uci(message.moveUCI)
+			position.play(move)
+			renderUI()
+		playSound("move-self")
+			break
+
+		case messages.DISCONNECT:
+			if (!over) {
+				over = true
+				setPrompt(statusMessages.ABORTED, statusMessages.PLAY_AGAIN)
+			}
+			break
+	}
 }
 
-
 const renderUI = () => {
-  promptTurn()
+	promptTurn()
 
-  // clear the board
-  while (board.lastElementChild.id != 'base') {
-    board.removeChild(board.lastElementChild)
-  }
+	// clear the board
+	while (board.lastElementChild.id != 'base') {
+		board.removeChild(board.lastElementChild)
+	}
 
-  const files = 'abcdefgh'.split('')
-  const ranks = '12345678'.split('')
+	for (let i = 0; i < 8; i++) {
+		for (let j = 0; j < 8; j++) {
 
-  // white and black have different perspectives of the board
-  const rows = color == 'w' ? ranks.reverse() : ranks
-  const cols = color == 'w' ? files : files.reverse()
+			highlightCoords(i, j, color)
 
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      const square = cols[j] + rows[i]
+			const piece = position.square(squareFromCoords(i, j, color))
+			if (piece != '-') {
+				placeSVG(i, j, `svg/pieces/${piece}.svg`, "piece")
+			}
+		}
+	}
 
-      if (isGreen(square) && isRed(square)) {
-        placeSVG(i, j, "svg/highlight/triangle-green.svg", "highlight")
-        placeSVG(i, j, "svg/highlight/triangle-red.svg", "highlight")
-      } else if (isGreen(square)) {
-        placeSVG(i, j, "svg/highlight/square-green.svg", "highlight")
-      } else if (isRed(square)) {
-        placeSVG(i, j, "svg/highlight/square-red.svg", "highlight")
-      }
+	if (position.isStalemate()) {
+		over = true
+		setPrompt(statusMessages.STALEMATE, statusMessages.PLAY_AGAIN)
+	} else if (position.isCheckmate()) {
+		over = true
+		setPrompt(position.turn() == color ? statusMessages.GAME_LOST : statusMessages.GAME_WON,
+				  statusMessages.PLAY_AGAIN)
+	}
 
-      const piece = position.square(square)
+}
 
-      if (piece != '-') {
-        placeSVG(i, j, `svg/pieces/${piece}.svg`, "piece")
-      }
-    }
-  }
+const highlightCoords = (i, j, color) => {
+	const square = squareFromCoords(i, j, color)
+	if (isGreen(square) && isRed(square)) {
+		placeSVG(i, j, "svg/highlight/triangle-lower.svg", "highlight green")
+		placeSVG(i, j, "svg/highlight/triangle-upper.svg", "highlight red")
+	} else if (isGreen(square)) {
+		placeSVG(i, j, "svg/highlight/square.svg", "highlight green")
+	} else if (isRed(square)) {
+		placeSVG(i, j, "svg/highlight/square.svg", "highlight red")
+	}
+}
+
+const files = 'abcdefgh'.split('')
+const ranks = '12345678'.split('')
+
+const squareFromCoords = (i, j, color) => {
+	// white and black have different perspectives of the board
+	const ei = color == 'w' ? ranks.length - i - 1 : i
+	const ej = color == 'w' ? j : files.length - j - 1
+	return files[ej] + ranks[ei]
 }
 
 const isGreen = (square) => {
-  return position.isAttacked(square, color)
+	return position.isAttacked(square, color)
 }
 
 const isRed = (square) => {
-  return position.isAttacked(square, kokopu.oppositeColor(color))
+	return position.isAttacked(square, kokopu.oppositeColor(color))
 }
 
-const placeSVG = (i, j, src, type) => {
-  const img = document.createElement("img")
-  img.style.transform = `translate(${j * 100}%, ${i * 100}%)`
-  img.className = type
-  img.setAttribute("src", src)
-  board.append(img)
+const placeSVG = (i, j, src, className) => {
+	const img = document.createElement("img")
+	img.style.transform = `translate(${j * 100}%, ${i * 100}%)`
+	img.className = className
+	img.setAttribute("src", src)
+	board.append(img)
 }
-
 
 const onclick = (event) => {
-  i = Math.floor(8 * event.clientY / base.clientHeight)
-  j = Math.floor(8 * event.clientX / base.clientWidth)
+	i = Math.floor(8 * event.clientY / base.clientHeight)
+	j = Math.floor(8 * event.clientX / base.clientWidth)
 
-  const files = 'abcdefgh'.split('')
-  const ranks = '12345678'.split('')
+	const square = squareFromCoords(i, j, color)
 
-  // white and black have different perspectives of the board
-  const rows = color == 'w' ? ranks.reverse() : ranks
-  const cols = color == 'w' ? files : files.reverse()
+	if (origin == null && isValidOrigin(square)) {
+		origin = square
+		enableHighlightFrom(origin)
+	} else if (origin != null) {
+		disableHighlightFrom(origin)
 
-  const square = cols[j] + rows[i]
+		const moveFun = position.isMoveLegal(origin, square)
+		if (moveFun) {
+			// this player makes a move
+			// NOTE: pawn promotion always resolves to queen
+			const arg = (moveFun.status == 'regular') ? '' : 'q'
 
-  if (origin == null && isValidOrigin(square)) {
-    origin = square
-    enableHighlightFrom(origin)
-  } else if (origin != null) {
-    disableHighlightFrom(origin)
-
-    const moveFun = position.isMoveLegal(origin, square)
-    if (moveFun) {
-      // this player makes a move
-      // NOTE: pawn promotion always resolves to queen
-      const arg = (moveFun.status == 'regular') ? '' : 'q'
-
-      const message = {
-        type: messages.MOVE,
-        moveUCI: origin + square + arg
-      }
-      socket.send(JSON.stringify(message))
-      const move = position.uci(message.moveUCI)
-      position.play(move)
-      renderUI()
-      origin = null
-    } else if (isValidOrigin(square)) {
-    // if the second clicked square is not a legal destination,
-    //  but a valid origin, set it as origin.
-      origin = square
-      enableHighlightFrom(origin)
-      // origin is not null, waiting for second click
-    } else {
-    // the second move is not a legal destination,
-    //  and not a valid origin: cancel the move by nulling `origin`
-      origin = null
-    }
-  }
+			const message = {
+				type: messages.MOVE,
+				moveUCI: origin + square + arg
+			}
+			socket.send(JSON.stringify(message))
+			const move = position.uci(message.moveUCI)
+			position.play(move)
+			renderUI()
+			origin = null
+		} else if (isValidOrigin(square)) {
+		// if the second clicked square is not a legal destination,
+		//	but a valid origin, set it as origin.
+			origin = square
+			enableHighlightFrom(origin)
+			// origin is not null, waiting for second click
+		} else {
+		// the second move is not a legal destination,
+		//	and not a valid origin: cancel the move by nulling `origin`
+			origin = null
+		}
+	}
 }
-
 
 const enableHighlightFrom = (origin) => {
-  const files = 'abcdefgh'.split('')
-  const ranks = '12345678'.split('')
-
-  // white and black have different perspectives of the board
-  const rows = color == 'w' ? ranks.reverse() : ranks
-  const cols = color == 'w' ? files : files.reverse()
-
-  for (let i = 0; i < 8; i++)
-    for (let j = 0; j < 8; j++) {
-      const square = cols[j] + rows[i]
-      if (position.isMoveLegal(origin, square))
-        if (isRed(square))
-          placeSVG(i, j, "svg/highlight/triangle-seagreen.svg", "highlight")
-        else
-          placeSVG(i, j, "svg/highlight/square-seagreen.svg", "highlight")
-    }
+	for (let i = 0; i < 8; i++)
+		for (let j = 0; j < 8; j++) {
+			const square = squareFromCoords(i, j, color)
+			if (position.isMoveLegal(origin, square))
+				if (isRed(square))
+					placeSVG(i, j, "svg/highlight/triangle-lower.svg", "highlight seagreen")
+				else
+					placeSVG(i, j, "svg/highlight/square.svg", "highlight seagreen")
+		}
 }
 
-
-const disableHighlightFrom = (origin) => {
-  while (board.lastElementChild.className == 'highlight') {
-    board.removeChild(board.lastElementChild)
-  }
+const disableHighlightFrom = () => {
+	while (board.lastElementChild.className.includes('highlight')) {
+		board.removeChild(board.lastElementChild)
+	}
 }
-
 
 const isValidOrigin = (square) => {
  return (position.square(square)[0] == color
-        && position.turn() == color && !over)
+				&& position.turn() == color && !over)
 }
-
 
 const setPrompt = (...statusMessageList) => {
-  prompt.innerHTML = statusMessageList.join(' ')
+	prompt.innerHTML = statusMessageList.join(' ')
 }
-
 
 const promptTurn = () => {
-  setPrompt(position.turn() == color ? statusMessages.YOUR_TURN : statusMessages.OPP_TURN)
+	setPrompt(position.turn() == color ? statusMessages.YOUR_TURN : statusMessages.OPP_TURN)
 }
 
+const sounds = {
+	"move-self": new Audio("sounds/move-self.webm")
+}
+
+const playSound = (sound) => {
+	// Reset sound incase it hasn't finished playback yet
+	sounds[sound].currentTime = 0;
+	sounds[sound].muted = false; // Chrome support
+	sounds[sound].play();
+}
 
 setup()

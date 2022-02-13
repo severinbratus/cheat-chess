@@ -1,18 +1,14 @@
 const express = require("express")
 const http = require("http")
 const ws = require("ws")
-const kokopu = require("kokopu")
-
 
 const Pairing = require("./Pairing")
 const messages = require("../front-end/js/messages")
-
 
 // return a random integer in range [0,max)
 const randInt = (max) => {
   return Math.floor(Math.random() * (max-1));
 }
-
 
 const cleanup = () => {
   for (let key in pairings) {
@@ -22,7 +18,6 @@ const cleanup = () => {
         delete pairings[key]
   }
 }
-
 
 const onconnection = (connection) => {
   connection["id"] = connectionID++
@@ -46,7 +41,6 @@ const onconnection = (connection) => {
   connection.on("close", onclose.bind(null, connection))
 }
 
-
 const startGame = () => {
   // start the game!
   const scharnaglCode = 518 // randInt(960) // 518 // for classical chess
@@ -61,18 +55,16 @@ const startGame = () => {
   }
 }
 
-
 const onmessage = (connection, messageRaw) => {
   const message = JSON.parse(messageRaw.toString())
   console.log("Received:", message)
 
   const pairing = pairings[connection["id"]]
-  oppConnection = pairing.players[(pairing.players[0] == connection) ? 1 : 0]
+  const oppConnection = pairing.players[(pairing.players[0] == connection) ? 1 : 0]
 
   if (message.type == messages.MOVE)
     oppConnection.send(JSON.stringify(message))
 }
-
 
 const onclose = (connection, code) => {
   console.log(`${connection["id"]} disconnected ...`)
@@ -88,7 +80,6 @@ const onclose = (connection, code) => {
     }
   }
 }
-
 
 const app = express()
 app.use(express.static(__dirname + "/../front-end"))
