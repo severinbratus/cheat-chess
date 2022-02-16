@@ -12,6 +12,11 @@ let over = false
 // origin square for a move
 let origin = null
 
+const captured = {
+	w: [],
+	b: []
+}
+
 const setup = () => {
 	setPrompt(statusMessages.OPP_TURN)
 	socket = new WebSocket(`ws://${location.host}`)
@@ -31,9 +36,7 @@ const onmessage = (event) => {
 
 		case messages.MOVE:
 			const move = position.uci(message.moveUCI)
-			position.play(move)
-			renderUI()
-		playSound("move-self")
+			playMove(move)
 			break
 
 		case messages.DISCONNECT:
@@ -65,6 +68,18 @@ const renderUI = () => {
 		}
 	}
 
+	captured[color].forEach((piece, idx) => {
+		const i = 8 + Math.floor(idx / 4)
+		const j = idx % 4
+		placeSVG(i, j, `svg/pieces/${piece}.svg`, "piece")
+	})
+
+	captured[kokopu.oppositeColor(color)].forEach((piece, idx) => {
+		const i = 8 + Math.floor(idx / 4)
+		const j = 4 + idx % 4
+		placeSVG(i, j, `svg/pieces/${piece}.svg`, "piece")
+	})
+
 	if (position.isStalemate()) {
 		over = true
 		setPrompt(statusMessages.STALEMATE, statusMessages.PLAY_AGAIN)
@@ -88,8 +103,8 @@ const highlightCoords = (i, j, color) => {
 	}
 }
 
-const files = 'abcdefgh'.split('')
-const ranks = '12345678'.split('')
+const files = [...'abcdefgh']
+const ranks = [...'12345678']
 
 const squareFromCoords = (i, j, color) => {
 	// white and black have different perspectives of the board
@@ -138,8 +153,7 @@ const onclick = (event) => {
 			}
 			socket.send(JSON.stringify(message))
 			const move = position.uci(message.moveUCI)
-			position.play(move)
-			renderUI()
+			playMove(move)
 			origin = null
 		} else if (isValidOrigin(square)) {
 		// if the second clicked square is not a legal destination,
@@ -155,11 +169,24 @@ const onclick = (event) => {
 	}
 }
 
+const pieceOrder = [..."pnbrq"]
+const piecePriority = coloredPiece => pieceOrder.findIndex(piece => piece == coloredPiece[1])
+
+const playMove = (move) => {
+	position.play(move)
+	if (move.isCapture()) {
+		captured[move.color()].push(move.capturedColoredPiece())
+		captured[move.color()].sort((a, b) => piecePriority(a) - piecePriority(b))
+	}
+	playSound("move-self")
+	renderUI()
+}
+
 const enableHighlightFrom = (origin) => {
 	for (let i = 0; i < 8; i++)
 		for (let j = 0; j < 8; j++) {
 			const square = squareFromCoords(i, j, color)
-			if (position.isMoveLegal(origin, square))
+			if (position.isMoveLegal(origin, square) || square == origin)
 				if (isRed(square))
 					placeSVG(i, j, "svg/highlight/triangle-lower.svg", "highlight seagreen")
 				else
