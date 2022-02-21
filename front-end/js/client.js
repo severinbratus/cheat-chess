@@ -58,13 +58,7 @@ const renderUI = () => {
 
 	for (let i = 0; i < 8; i++) {
 		for (let j = 0; j < 8; j++) {
-
-			highlightCoords(i, j, color)
-
-			const piece = position.square(squareFromCoords(i, j, color))
-			if (piece != '-') {
-				placeSVG(i, j, `svg/pieces/${piece}.svg`, "piece")
-			}
+			populateCoords(i, j, color)
 		}
 	}
 
@@ -89,6 +83,15 @@ const renderUI = () => {
 				  statusMessages.PLAY_AGAIN)
 	}
 
+}
+
+const populateCoords = (i, j, color) => {
+	highlightCoords(i, j, color)
+
+	const piece = position.square(squareFromCoords(i, j, color))
+	if (piece != '-') {
+		placeSVG(i, j, `svg/pieces/${piece}.svg`, "piece")
+	}
 }
 
 const highlightCoords = (i, j, color) => {
@@ -201,7 +204,7 @@ const disableHighlightFrom = () => {
 }
 
 const isValidOrigin = (square) => {
- return (position.square(square)[0] == color
+	return (position.square(square)[0] == color
 				&& position.turn() == color && !over)
 }
 
