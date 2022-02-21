@@ -88,21 +88,17 @@ const renderUI = () => {
 const populateCoords = (i, j, color) => {
 	highlightCoords(i, j, color)
 
-	const piece = position.square(squareFromCoords(i, j, color))
-	if (piece != '-') {
+	const square = squareFromCoords(i, j, color)
+	const piece = position.square(square)
+	if (piece != '-' && (piece[0] == color || isGreen(square))) {
 		placeSVG(i, j, `svg/pieces/${piece}.svg`, "piece")
 	}
 }
 
 const highlightCoords = (i, j, color) => {
 	const square = squareFromCoords(i, j, color)
-	if (isGreen(square) && isRed(square)) {
-		placeSVG(i, j, "svg/highlight/triangle-lower.svg", "highlight green")
-		placeSVG(i, j, "svg/highlight/triangle-upper.svg", "highlight red")
-	} else if (isGreen(square)) {
+	if (isGreen(square)) {
 		placeSVG(i, j, "svg/highlight/square.svg", "highlight green")
-	} else if (isRed(square)) {
-		placeSVG(i, j, "svg/highlight/square.svg", "highlight red")
 	}
 }
 
@@ -190,10 +186,7 @@ const enableHighlightFrom = (origin) => {
 		for (let j = 0; j < 8; j++) {
 			const square = squareFromCoords(i, j, color)
 			if (position.isMoveLegal(origin, square) || square == origin)
-				if (isRed(square))
-					placeSVG(i, j, "svg/highlight/triangle-lower.svg", "highlight seagreen")
-				else
-					placeSVG(i, j, "svg/highlight/square.svg", "highlight seagreen")
+				placeSVG(i, j, "svg/highlight/square.svg", "highlight seagreen")
 		}
 }
 
