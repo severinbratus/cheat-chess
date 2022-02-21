@@ -5,11 +5,11 @@
 }
 
 #base {
-	width: 100px;
+	width: 500px;
 }
 
 .piece, .highlight {
-	width: 12.5px;
+	width: 62.5px;
 }
 
 .highlight {
@@ -34,6 +34,6 @@
 #prompt {
 	position: fixed;
 	bottom: 0;
-	font-size: 5px;
+	font-size: 33px;
 	font-family: monospace;
 }

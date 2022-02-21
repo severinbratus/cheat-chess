@@ -18,7 +18,7 @@ npm start
 
 ### Issues
 
-- The board size is hardcoded to be 100px. Yes, it is.
+- The board size is hardcoded to some number of pixels.
 - The piece selection mechanism will break down if the board does not fit in the window.
 - No, you cannot center the board.
 
