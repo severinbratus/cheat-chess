@@ -1,12 +1,7 @@
-## Cheat Chess
+## Darker Chess
 
-A quick and dirty proof of concept, which came to be in the aftermath of the TU Delft CSE1500 experience.
-
-The concept is to provide a visual feel for *the areas of influence* of the two sides by highlighting all the squares that are in the range of attack of one player.
-
-One image says it all, I hope:
-
-![Epic chess highlighting](/demo.png?raw=true)
+Usual chess, but with visibility constraints -- the player can only see the enemy pieces that are in the range of attack. If there is an enemy piece in front of a pawn, that piece may or may not be visible, and the pawn will not be able to move. Likewise, if your king is in check, you will not be notified of it, but you will *feel* it.
+*En passant* moves are possible, but tricky.
 
 ### Setup
 
@@ -22,6 +17,4 @@ npm start
 - The piece selection mechanism will break down if the board does not fit in the window.
 - No, you cannot center the board.
 
-This is a total hackjob, but it is good enough for my purposes.
-
-Stay tuned for a variation of Dark Kriegspiel chess, as well as Hofstadter meta-chess, where in order to win you will have to present an inductive proof that you will check-mate the opponent on an infinite succession of chessboards.
+This is a total hackjob, but it is good enough for my purposes. This game can totally be cheated with the dev tools and some knowledge of the source code, because full game state is stored on the client-side.
