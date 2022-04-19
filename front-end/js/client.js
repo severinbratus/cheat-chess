@@ -12,6 +12,8 @@ let over = false
 // origin square for a move
 let origin = null
 
+let lastMove = null
+
 const captured = {
 	w: [],
 	b: []
@@ -58,6 +60,10 @@ const renderUI = () => {
 
 	for (let i = 0; i < 8; i++) {
 		for (let j = 0; j < 8; j++) {
+			const square = squareFromCoords(i, j, color)
+			if (lastMove && (square == lastMove.to() || square == lastMove.from()))
+				placeSVG(i, j, "svg/highlight/square.svg", "superhighlight royalblue")
+			highlightCoords(i, j, color)
 			populateCoords(i, j, color)
 		}
 	}
@@ -86,8 +92,6 @@ const renderUI = () => {
 }
 
 const populateCoords = (i, j, color) => {
-	highlightCoords(i, j, color)
-
 	const piece = position.square(squareFromCoords(i, j, color))
 	if (piece != '-') {
 		placeSVG(i, j, `svg/pieces/${piece}.svg`, "piece")
@@ -181,6 +185,7 @@ const playMove = (move) => {
 		captured[move.color()].push(move.capturedColoredPiece())
 		captured[move.color()].sort((a, b) => piecePriority(a) - piecePriority(b))
 	}
+	lastMove = move
 	playSound("move-self")
 	renderUI()
 }
