@@ -196,7 +196,7 @@ const enableHighlightFrom = (origin) => {
 			const square = squareFromCoords(i, j, color)
 			if (position.isMoveLegal(origin, square) || square == origin)
 				if (isRed(square))
-					placeSVG(i, j, "svg/highlight/triangle-lower.svg", "highlight seagreen")
+					placeSVG(i, j, "svg/highlight/triangle-lower-right.svg", "highlight seagreen")
 				else
 					placeSVG(i, j, "svg/highlight/square.svg", "highlight seagreen")
 		}
