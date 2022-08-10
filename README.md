@@ -1,20 +1,25 @@
 ## Darker Chess
 
-Usual chess, but with visibility constraints -- the player can only see the enemy pieces that are in the range of attack. If there is an enemy piece in front of a pawn, that piece may or may not be visible, and the pawn will not be able to move. Likewise, if your king is in check, you will not be notified of it, but you will *feel* it.
-*En passant* moves are possible, but tricky.
+Usual chess, but with visibility constraints -- the player can only see the enemy pieces that are in their range of attack.
+Like in normal chess, the ultimate achievement is to check-mate the opponent.
+This is different from [Dark chess](https://en.wikipedia.org/wiki/Dark_chess), and is hence called *Darker chess* due to my limited creativity.
+
+### Caveats
+
+If there is an enemy piece in front of a pawn, that piece may or may not be visible, and the pawn will not be able to move.
+Likewise, if your king is in check, you will not be notified of it, but you will *feel* it.
+*En passant* moves are possible, but, again, you may not know they are available.
 
 ### Setup
 
-``` sh
-cd back-end
-npm install
-npm start
-```
+See [link](https://github.com/severinbratus/cheat-chess/tree/main#setup)
 
-### Issues
+### Issues (specific to this branch)
 
-- The board size is hardcoded to some number of pixels.
-- The piece selection mechanism will break down if the board does not fit in the window.
-- No, you cannot center the board.
+- This game can totally be cheated with the dev tools and some knowledge of the source code, because full game state is stored on the client-side.
+- The player is not notified in case of a check, and can only deduce they are in one based on the limited range of available moves (availability is communicated by highlighting)
+- See also [link](https://github.com/severinbratus/cheat-chess/tree/main#issues)
 
-This is a total hackjob, but it is good enough for my purposes. This game can totally be cheated with the dev tools and some knowledge of the source code, because full game state is stored on the client-side.
+# See also
+
+- [Main branch](https://github.com/severinbratus/cheat-chess/tree/main#issues)
