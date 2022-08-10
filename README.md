@@ -4,6 +4,8 @@ Usual chess, but with visibility constraints -- the player can only see the enem
 Like in normal chess, the ultimate achievement is to check-mate the opponent.
 This is different from [Dark chess](https://en.wikipedia.org/wiki/Dark_chess), and is hence called *Darker chess* due to my limited creativity.
 
+![Demo](/demo.png?raw=true)
+
 ### Caveats
 
 If there is an enemy piece in front of a pawn, that piece may or may not be visible, and the pawn will not be able to move.
