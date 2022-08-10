@@ -20,6 +20,6 @@ See [link](https://github.com/severinbratus/cheat-chess/tree/main#setup)
 - The player is not notified in case of a check, and can only deduce they are in one based on the limited range of available moves (availability is communicated by highlighting)
 - See also [link](https://github.com/severinbratus/cheat-chess/tree/main#issues)
 
-# See also
+### See also
 
 - [Main branch](https://github.com/severinbratus/cheat-chess/tree/main#issues)
